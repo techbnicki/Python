@@ -1,0 +1,46 @@
+#importing various libraries to help complete my visualizations 
+import pandas as pd 
+import matplotlib.pyplot as plt #used for interactive visualizations
+import seaborn as sns #used for statistical graphs
+
+#now we have to get our files into dataframes
+df_chapters = pd.read_csv(r'/Users/bree/Documents/chapters.csv')
+df_characters = pd.read_csv(r'/Users/bree/Documents/characters.csv')
+df_datadict = pd.read_csv(r'/Users/bree/Documents/datadict.csv')
+df_dialogue = pd.read_csv(r'/Users/bree/Documents/dialogue.csv')
+df_movies = pd.read_csv(r'/Users/bree/Documents/movies.csv')
+df_places = pd.read_csv(r'/Users/bree/Documents/places.csv')
+df_spells = pd.read_csv(r'/Users/bree/Documents/spells.csv')
+df_spells.head(50)
+
+#cleaning data to display incantations only
+spell_data = df_spells.drop(['Spell ID','Effect', 'Light', 'Spell Name'],axis=1)
+
+from wordcloud import WordCloud
+from wordcloud import STOPWORDS
+from wordcloud import ImageColorGenerator
+text = " ".join(i for i in spell_data.Incantation)
+stopwords = set(STOPWORDS)
+wordcloud = WordCloud(stopwords=stopwords, max_words= 50, colormap='tab20b', 
+                       background_color="black").generate(text)
+plt.figure( figsize=(15,10))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+
+#This is where we create the bar plot
+def bar(df, column, ax, color):
+    ax = df[column].value_counts().plot(kind='bar', 
+                                        ax=ax, 
+                                        color=color)
+    ax.set_title(column, fontsize=16) 
+    
+color1 = plt.cm.autumn(np.linspace(0, 1, len(df_places["Place Category"].value_counts())))
+
+
+fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(15,8))
+plt.suptitle('Where have we been?', fontsize=18) 
+bar(df_places, "Place Category", axes, color1)
+plt.show()
+
+df_places[df_places['Place Category'] > 'Diagon Alley']
