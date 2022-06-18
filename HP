@@ -2,6 +2,8 @@
 import pandas as pd 
 import matplotlib.pyplot as plt #used for interactive visualizations
 import seaborn as sns #used for statistical graphs
+import numpy as np
+
 
 #now we have to get our files into dataframes
 df_chapters = pd.read_csv(r'/Users/bree/Documents/chapters.csv')
